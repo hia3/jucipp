@@ -101,6 +101,13 @@ Menu::Menu() : plugin_menu(nullptr) {
              +accels["save_as"]+ //For Ubuntu...
   "        </item>"
   "      </section>"
+  "      <section>"
+  "        <item>"
+  "          <attribute name='label' translatable='yes'>_Print</attribute>"
+  "          <attribute name='action'>app.print</attribute>"
+             +accels["print"]+ //For Ubuntu...
+  "        </item>"
+  "      </section>"
   "    </submenu>"
   ""
   "    <submenu>"

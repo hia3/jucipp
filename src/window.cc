@@ -217,11 +217,12 @@ void Window::set_menu_actions() {
         Terminal::get().print("Error: "+cpp_main_path.string()+" already exists.\n", true);
         return;
       }
-      std::string cmakelists="cmake_minimum_required(VERSION 2.8)\n\nproject("+project_name+")\n\nset(CMAKE_CXX_FLAGS \"${CMAKE_CXX_FLAGS} -std=c++1y -Wall\")\n\nadd_executable("+project_name+" main.cpp)\n";
-      std::string cpp_main="#include <iostream>\n\nusing namespace std;\n\nint main() {\n  cout << \"Hello World!\" << endl;\n\n  return 0;\n}\n";
+      std::string cmakelists="cmake_minimum_required(VERSION 2.8)\n\nproject("+project_name+")\n\nset(CMAKE_CXX_FLAGS \"${CMAKE_CXX_FLAGS} -std=c++1y -Wall -Wextra -Wno-unused-parameter\")\n\nadd_executable("+project_name+" main.cpp)\n";
+      std::string cpp_main="#include <iostream>\n\nint main() {\n  std::cout << \"Hello World!\\n\";\n}\n";
       if(filesystem::write(cmakelists_path, cmakelists) && filesystem::write(cpp_main_path, cpp_main)) {
         Directories::get().open(project_path);
         notebook.open(cpp_main_path);
+        Directories::get().update();
         Terminal::get().print("C++ project "+project_name+" created.\n");
       }
       else
@@ -291,6 +292,27 @@ void Window::set_menu_actions() {
         else
           Terminal::get().print("Error saving file\n");
       }
+    }
+  });
+  
+  menu.add_action("print", [this]() {
+    if(notebook.get_current_page()!=-1) {
+      auto view=notebook.get_current_view();
+      auto print_operation=Gtk::PrintOperation::create();
+      auto print_compositor=Gsv::PrintCompositor::create(*view);
+      
+      print_operation->set_job_name(view->file_path.filename().string());
+      print_compositor->set_wrap_mode(Gtk::WrapMode::WRAP_WORD_CHAR);
+      
+      print_operation->signal_begin_print().connect([print_operation, print_compositor](const Glib::RefPtr<Gtk::PrintContext>& print_context) {
+        while(!print_compositor->paginate(print_context));
+        print_operation->set_n_pages(print_compositor->get_n_pages());
+      });
+      print_operation->signal_draw_page().connect([print_compositor](const Glib::RefPtr<Gtk::PrintContext>& print_context, int page_nr) {
+        print_compositor->draw_page(print_context, page_nr);
+      });
+      
+      print_operation->run(Gtk::PRINT_OPERATION_ACTION_PRINT_DIALOG, *this);
     }
   });
   

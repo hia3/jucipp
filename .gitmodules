@@ -1,11 +1,9 @@
-[submodule "tiny-process-library"]
-	path = tiny-process-library
-	url = https://github.com/eidheim/tiny-process-library
-	branch = v1.0.3
 [submodule "libclangmm"]
 	path = libclangmm
 	url = https://github.com/cppit/libclangmm
-	branch = v0.9.5
 [submodule "pybind11"]
 	path = pybind11
 	url = https://github.com/pybind/pybind11.git
+[submodule "tiny-process-library"]
+	path = tiny-process-library
+	url = https://github.com/eidheim/tiny-process-library
