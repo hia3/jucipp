@@ -5,6 +5,7 @@
 #include <pygobject.h>
 #include "menu.h"
 #include "directories.h"
+#include <pybind11/functional.h>
 
 static wchar_t* DecodeLocale(const char* arg, size_t *size)
 {
@@ -68,7 +69,13 @@ Python::Interpreter::Interpreter(){
     .def("get_gtk_notebook",[](){return pyobject_from_gobj(Notebook::get().gobj());})
     .def_submodule("terminal")
       .def("get_gtk_text_view",[](){return pyobject_from_gobj(Terminal::get().gobj());})
-      .def("println", [](const std::string &message){ Terminal::get().print(message +"\n"); });
+      .def("println", [](const std::string &message){ Terminal::get().print(message +"\n"); })
+      .def("process",[](std::string command, std::string path, bool use_pipes){
+        return Terminal::get().process(command, path, use_pipes);
+      })
+      .def("process_async",[](std::string command, std::string path, std::function<void(int exit_status)>callback){
+        return Terminal::get().async_process(command,path,callback);
+      });
     api.def_submodule("directories")
     .def("get_gtk_treeview",[](){return pyobject_from_gobj(Directories::get().gobj());})
     .def("open",[](const std::string &directory){Directories::get().open(directory);})
