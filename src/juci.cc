@@ -4,7 +4,6 @@
 #include "directories.h"
 #include "menu.h"
 #include "config.h"
-#include "logging.h"
 #include "python_interpreter.h"
 
 int Application::on_command_line(const Glib::RefPtr<Gio::ApplicationCommandLine> &cmd) {
@@ -117,11 +116,6 @@ void Application::on_startup() {
 }
 
 Application::Application() : Gtk::Application("no.sout.juci", Gio::APPLICATION_NON_UNIQUE | Gio::APPLICATION_HANDLES_COMMAND_LINE) {
-  boost::log::add_common_attributes();
-  auto log_dir = Config::get().juci_home_path()/"log"/"juci.log";
-  boost::log::add_file_log(boost::log::keywords::file_name = log_dir, boost::log::keywords::auto_flush = true);
-  JINFO("Logging initalized");
-  
   Glib::set_application_name("juCi++");
   
   //Gtk::MessageDialog without buttons caused text to be selected, this prevents that

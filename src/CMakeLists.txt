@@ -26,7 +26,7 @@ if(MSYS)
 endif()
 
 find_package(LibClang REQUIRED)
-find_package(Boost 1.54 COMPONENTS thread log regex system filesystem REQUIRED)
+find_package(Boost 1.54 COMPONENTS regex system filesystem REQUIRED)
 find_package(ASPELL REQUIRED)
 find_package(PythonLibs 3 REQUIRED)
 set(LIBCLANGMM_INCLUDE_DIR ../libclangmm/src)
@@ -94,7 +94,6 @@ set(project_files
     filesystem.h
     juci.cc
     juci.h
-    logging.h
     menu.cc
     menu.h
     notebook.cc
@@ -152,3 +151,15 @@ target_link_libraries(${project_name} ${global_libraries})
 install(TARGETS ${project_name}
   RUNTIME DESTINATION bin
 )
+
+# add a target to generate API documentation with Doxygen
+find_package(Plantuml)
+find_package(Doxygen)
+if(DOXYGEN_FOUND)
+  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
+  add_custom_target(doc
+    ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    COMMENT "Generating API documentation with Doxygen to ${CMAKE_CURRENT_BINARY_DIR}" VERBATIM
+  )
+endif(DOXYGEN_FOUND)

@@ -8,5 +8,7 @@
 !*.h
 !CMakeLists.txt
 !config.json
+!*.py
+!debian/*
 
 build

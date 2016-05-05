@@ -13,7 +13,7 @@ towards libclang with speed and ease of use in mind.
 * C++ warnings and errors on the fly
 * C++ Fix-its
 * Debug integration through lldb
-* Automated CMake processing
+* Automated CMake processing, including support for external libraries
 * Fast C++ autocompletion
 * Keyword and buffer autocompletion for other file types
 * Tooltips showing type information and doxygen documentation (C++)
@@ -39,9 +39,6 @@ See [enhancements](https://github.com/cppit/jucipp/labels/enhancement) for plann
 
 ## Dependencies
 * boost-filesystem
-* boost-log
-* boost-thread
-* boost-system
 * boost-regex
 * gtkmm-3.0
 * gtksourceviewmm-3.0
@@ -52,4 +49,7 @@ See [enhancements](https://github.com/cppit/jucipp/labels/enhancement) for plann
 * [tiny-process-library](http://github.com/eidheim/tiny-process-library/) (downloaded directly with git --recursive, no need to install)
 
 ## Installation
-See [installation guide](http://github.com/cppit/jucipp/blob/master/docs/install.md).
+See [installation guide](docs/install.md).
+
+## Documentation
+See [how to build the API doc](docs/api.md).
