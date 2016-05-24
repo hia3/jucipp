@@ -1,0 +1,21 @@
+sudo: required
+
+env:
+  - distribution: ubuntu
+  - distribution: fedora
+  - distribution: arch
+  - distribution: debian-testing
+  - distribution: debian
+
+services:
+  - docker
+  
+before_install:
+  - ./ci/update_travis.sh
+
+script:
+  - script=compile CXX=clang++ CC=clang ./ci/execute.sh
+  - script=clean ./ci/execute.sh
+  - script=compile ./ci/execute.sh
+  - script=static_analysis ./ci/execute.sh
+  - script=compile make_command="broadwayd & make test" ./ci/execute.sh
